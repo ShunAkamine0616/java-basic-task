@@ -7,6 +7,9 @@
     if (session.getAttribute("totalNum") == null) {
         session.setAttribute("totalNum", 25);
 	}
+	if (session.getAttribute("player") == null) {
+	    session.setAttribute("player", "B");
+	}
     int totalNum = (int) session.getAttribute("totalNum");  // 残数用の変数。仮で25をセットしている。必要に応じて変更
     String num = request.getParameter("num");
     int num_int = 0;
@@ -19,20 +22,19 @@
 //     if(Utility.isNullOrEmpty(player)) {
 //     	player = "A";
 //     } else {
-   	if(player == "A") {
+//     }
+    if(player.equals("A")) {
    		player = "B";
    	} else {
    		player = "A";
    	}
-//     }
-    session.setAttribute("player", player);
-    session.setAttribute("totalNum", totalNum);
     // 残数が0以下の場合、結果ページへ遷移
     // (responseオブジェクトのsendRedirectメソッドを使用する)
     if(totalNum <= 0) {
     	response.sendRedirect("finish.jsp");
-    } else if(request.getParameter("btn") != null) {
-    	response.sendRedirect("play.jsp");
+    } else {
+    	session.setAttribute("player", player);
+        session.setAttribute("totalNum", totalNum);
     }
     
 %>

@@ -3,6 +3,11 @@
 <%
     // セッションからプレイヤー名を取得する
     String player = (String) session.getAttribute("player");
+	if(player.equals("A")) {
+		player = "B";
+	} else {
+		player = "A";
+	}
 %>
 <!DOCTYPE html>
 <html>
