@@ -3,14 +3,37 @@
   pageEncoding="UTF-8"%>
 <%
         
-    // 残数の更新処理(残数の取得、更新、保存など)    
-    int totalNum = 25;  // 残数用の変数。仮で25をセットしている。必要に応じて変更
-    
+    // 残数の更新処理(残数の取得、更新、保存など)
+    if (session.getAttribute("totalNum") == null) {
+        session.setAttribute("totalNum", 25);
+	}
+    int totalNum = (int) session.getAttribute("totalNum");  // 残数用の変数。仮で25をセットしている。必要に応じて変更
+    String num = request.getParameter("num");
+    int num_int = 0;
+    if(!Utility.isNullOrEmpty(num)) {
+    	 num_int = Integer.parseInt(num);
+    }
+    totalNum -= num_int;
     // プレイヤーの切替処理(プレイヤーの取得、切替、保存など)
-    String player = "A";  // プレイヤー用の変数。仮で"A"をセットしている。必要に応じて変更
-    
+    String player = (String) session.getAttribute("player");  // プレイヤー用の変数。仮で"A"をセットしている。必要に応じて変更
+//     if(Utility.isNullOrEmpty(player)) {
+//     	player = "A";
+//     } else {
+   	if(player == "A") {
+   		player = "B";
+   	} else {
+   		player = "A";
+   	}
+//     }
+    session.setAttribute("player", player);
+    session.setAttribute("totalNum", totalNum);
     // 残数が0以下の場合、結果ページへ遷移
     // (responseオブジェクトのsendRedirectメソッドを使用する)
+    if(totalNum <= 0) {
+    	response.sendRedirect("finish.jsp");
+    } else if(request.getParameter("btn") != null) {
+    	response.sendRedirect("play.jsp");
+    }
     
 %>
 <!DOCTYPE html>
@@ -25,19 +48,20 @@
 
   <div class="info">
     <h2>
-      残り：xx個
+      残り：<%=totalNum %>個
     </h2>
     <p class="stone">
       <%
           // todo:このprint分は仮の処理。実装が完了したら削除する。
           // 表示する文字列("●●～")をメソッドを使い取得し、取得した文字列を表示する
-          out.println("●●●●●●●●●●<br>●●●●●●●●●●<br>●●●●●");
+//           out.println("●●●●●●●●●●<br>●●●●●●●●●●<br>●●●●●");
+      		out.println(Utility.getStoneDisplayHtml(totalNum));
       %>
     </p>
   </div>
   <div class="info">
     <h2>
-      プレイヤーxxの番
+      プレイヤー<%=player %>の番
     </h2>
 
     <form action="play.jsp">
