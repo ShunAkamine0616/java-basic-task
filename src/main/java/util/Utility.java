@@ -30,4 +30,15 @@ public class Utility {
   		}
     	return result;
     }
+    
+    public static String getStoneDisplayHtml(int totalNum, String char_stone) {
+    	String result = "";
+    	for (int i = 1; i <= totalNum; i++) {
+  			result += char_stone;
+  			if(i % 10 == 0) {
+  				result += "<br>";
+  			}
+  		}
+    	return result;
+    }
 }
